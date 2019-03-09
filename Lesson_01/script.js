@@ -21,7 +21,8 @@ let appData = {
 };
 
 appData.expenses = {
-    firstQuestion : secondQuestion
+    firstQuestion : secondQuestion,
+    firstQuestion2 : secondQuestion2
 }
 
 console.log("Бюджет за 1 день:" + appData.budget/30);
