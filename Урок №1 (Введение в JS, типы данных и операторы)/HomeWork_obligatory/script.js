@@ -21,7 +21,7 @@ var appData = {
     income: [],
     saving: false
 };
-console.log("Бюджет в один день:" + appData.budget/30);
+console.log("Бюджет за один день:" + appData.budget/30);
 
 
     
