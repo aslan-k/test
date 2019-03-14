@@ -83,28 +83,10 @@ let appData = {
                 console.log("Неверный ввод! Поторите.");
                 i = i - 1;    
             }
+            appData.income.forEach(function(item, i) {   
+                console.log(i+1 + ": " + item);
+                });
         }
-
-// ДЗ Lesson_04
-        for(let i = 0; i < 1; i++) {
-
-            let addIncome = prompt("Способы доп. заработка: (Перечислите через запятую)", ""),
-            arr = [];
-     
-            if( (typeof(addIncome)) === "string" && (typeof(addIncome)) != null && addIncome != "") {
-                arr.push(addIncome);
-                arr = addIncome.split(", ");
-                arr.sort();   
-            } else {
-                console.log("Неверный ввод! Поторите.");
-                i = i - 1;    
-            }
-            console.log("Способы доп. заработка:"); 
-
-            arr.forEach(function(item, i) {   
-            console.log(i+1 + ": " + item);
-            });
-        }       
     }
 };
 
