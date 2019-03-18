@@ -1,7 +1,7 @@
 let menuItem = document.querySelectorAll(".menu-item"),
     menu     = document.querySelector(".menu"),
 
-    newButton = document.createElement("li"), //создали новый элемент li
+    newButton = document.createElement("li"), //создать новый элемент li
 
     column = document.querySelectorAll(".column"),
     adv    = document.querySelector(".adv"),
@@ -10,10 +10,8 @@ let menuItem = document.querySelectorAll(".menu-item"),
     block    = document.querySelector("#prompt"),
     question = prompt();
 
-    
-
-menu.appendChild(newButton);//добавили новый элемент li
-newButton.classList.add("menu-item"); //добавили в новый элемент li класс menu-item
+menu.appendChild(newButton);//добавить новый элемент li
+newButton.classList.add("menu-item"); //добавить в новый элемент li класс menu-item
 newButton.innerHTML = "Пятый пункт"; //добавить пятый пункт
 
 menu.insertBefore(menuItem[1], menuItem[3]); //Восстановить порядок в меню
