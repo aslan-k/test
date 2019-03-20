@@ -8,7 +8,7 @@ let menuItem = document.querySelectorAll(".menu-item"),
     title  = document.querySelector(".title"),
 
     block    = document.querySelector("#prompt"),
-    question = prompt();
+    question = prompt("Как Вы относитесь к технике Apple?", "");
 
 menu.appendChild(newButton);//добавить новый элемент li
 newButton.classList.add("menu-item"); //добавить в новый элемент li класс menu-item
