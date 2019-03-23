@@ -1,23 +1,17 @@
 let startBtn = document.getElementById("start"),
 
-    //budgetValue           = document.getElementsByClassName("budget-value"),
-    budgetValue           = document.querySelector(".budget-value"),
-    //daybudgetValue        = document.getElementsByClassName("daybudget-value"),
-    daybudgetValue        = document.querySelector(".daybudget-value"),
-    //levelValue            = document.getElementsByClassName("level-value"),
-    levelValue            = document.querySelector(".level-value"),
-    //expensesValue         = document.getElementsByClassName("expenses-value"),
-    expensesValue          = document.querySelector(".expenses-value"),
-    //optionalExpensesValue = document.getElementsByClassName("optionalexpenses-value"),
-    optionalExpensesValue = document.querySelector(".optionalexpenses-value"),
-    //incomeValue           = document.getElementsByClassName("income-value"),
-    incomeValue           = document.querySelector(".income-value"),
-    //monthSavingsValue     = document.getElementsByClassName("monthsavings-value"),
-    monthSavingsValue     = document.querySelector(".monthsavings-value"),
-    //yearSavingsValue      = document.getElementsByClassName("yearsavings-value"),
-    yearSavingsValue      = document.querySelector(".yearsavings-value"),
+    budgetValue           = document.getElementsByClassName("budget-value")[0],
+    daybudgetValue        = document.getElementsByClassName("daybudget-value")[0],
+    levelValue            = document.getElementsByClassName("level-value")[0],
+    expensesValue         = document.getElementsByClassName("expenses-value")[0],
+    optionalExpensesValue = document.getElementsByClassName("optionalexpenses-value")[0],
+    incomeValue           = document.getElementsByClassName("income-value")[0],
+    monthSavingsValue     = document.getElementsByClassName("monthsavings-value")[0],
+    yearSavingsValue      = document.getElementsByClassName("yearsavings-value")[0],
 
     expensesItems = document.getElementsByClassName("expenses-item"),
+
+    buttons = document.querySelectorAll("button"),
 
     expensesBtn         = document.getElementsByTagName("button")[0],
     optionalExpensesBtn = document.getElementsByTagName("button")[1],
@@ -50,48 +44,66 @@ startBtn.addEventListener("click", function() {
     dayValue.value = new Date(Date.parse(time)).getDate();
 });
 
-expensesBtn.addEventListener("click", function(event) {    
+//Блокировка кнопок
+for(let i=0; i<buttons.length-1; i++) { 
+    buttons[i].disabled = true;
+    buttons[i].style.background = "gray";
+}
+
+ //Активация кнопок обязательных расходов
+startBtn.addEventListener("click", function() {
     for(let i = 0; i < expensesItems.length; i++) {
+    if(i == 1 || i == 3){
+        expensesItems[i].addEventListener("change", function() {
+            if(expensesItems[i-1].value != "" && expensesItems[i].value != "") {
+                buttons[0].disabled = false;
+                buttons[0].style.background = "#ffbd75";  
+            }
+        }); 
+    }      
+}
+});    
+expensesBtn.addEventListener("click", function() {
+    expensesValue.textContent = "";  
 
-        if(optionalExpensesItem[i].value != undefined && appData.budget != undefined && appData.timeData != undefined){
+    for(let i = 0; i < expensesItems.length; i++) {
+        let a  = expensesItems[i].value,
+            b  = expensesItems[++i].value;
 
-            let a  = expensesItems[i].value,
-                b  = expensesItems[++i].value;
-            if( (typeof(a)) === "string" && (typeof(a)) != null && (typeof(b)) != null
-               && a != "" && b != "" && a.length < 50) {
-                console.log("done");
-                appData.expenses[a] = b;
-                sum += +b;
-                expensesValue.textContent = sum;
-            } else {
-                i = i - 1;
-            }  
-        } else {
-            event.preventDefault();   //блокировать кнопку "Подтвердить" обязательные расходы
-            console.log("Ошибка! Сначала введите нужные данные");
-        }    
-    }   
+        appData.expenses[a] = b;
+        sum += +b;            
+    } 
+    expensesValue.textContent = sum;   
 });
 
-optionalExpensesBtn.addEventListener("click", function(event) {
+// кнопка необязательных расходов активируется если хотя бы одно поле заполнено
+startBtn.addEventListener("click", function() {
     for(let i = 0; i < optionalExpensesItem.length; i++) {
-        
-        if(optionalExpensesItem[i].value != "" && appData.budget != undefined && appData.timeData != undefined){
+        optionalExpensesItem[i].addEventListener("change", function() {
+            if(optionalExpensesItem[i].value != "") {
+                buttons[1].disabled = false;
+                buttons[1].style.background = "#ffbd75";  
+            }
+        });      
+    } 
+});
+optionalExpensesBtn.addEventListener("click", function() {
+    expensesValue.textContent = "";
 
+    for(let i = 0; i < optionalExpensesItem.length; i++) {
             let optExpenses  = optionalExpensesItem[i].value;
             appData.optionalExpenses[i] = optExpenses;
-            optionalExpensesValue.textContent += appData.optionalExpenses[i] + " ";  
-        } else {
-            event.preventDefault();   //блокировать кнопку "Подтвердить" необязательные расходы
-            console.log("Ошибка! Сначала введите нужные данные");
-        }        
+            optionalExpensesValue.textContent += appData.optionalExpenses[i] + " ";          
     }
 });
 
+startBtn.addEventListener("click", function() {
+    buttons[2].disabled = false;
+    buttons[2].style.background = "#ffbd75"; 
+});
 countBtn.addEventListener("click", function(event) {
-
-    if(appData.budget != undefined && appData.timeData != undefined) {
-
+    if(appData.budget != undefined) {
+        
         appData.moneyPerDay = ((appData.budget-sum)/30).toFixed(); //Расчет дневного бюджета
         daybudgetValue.textContent = appData.moneyPerDay;
 
@@ -104,10 +116,7 @@ countBtn.addEventListener("click", function(event) {
         } else {
             levelValue.textContent = "Произошла ошибка!";
         }
-    } else {
-        event.preventDefault();                           //блокировать кнопку "Рассчитать"
-        console.log("Ошибка! Сначала определите бюджет");
-    }  
+    } 
 });
 
 income.addEventListener("input", function() {
@@ -118,9 +127,9 @@ income.addEventListener("input", function() {
 
 checkSavings.addEventListener("click", function() {
     if(appData.savings == true) {
-        appData.savings == false; 
+        appData.savings = false; 
     } else {
-        appData.savings == true;
+        appData.savings = true;
     }
 });
 
@@ -156,7 +165,7 @@ let appData = {
     expenses: {},
     optionalExpenses: {},
     income: [],
-    savings: true //временно на true
+    savings: false
 };
 
 
