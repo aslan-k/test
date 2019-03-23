@@ -54,7 +54,7 @@ for(let i=0; i<buttons.length-1; i++) {
 startBtn.addEventListener("click", function() {
     for(let i = 0; i < expensesItems.length; i++) {
     if(i == 1 || i == 3){
-        expensesItems[i].addEventListener("change", function() {
+        expensesItems[i].addEventListener("input", function() {
             if(expensesItems[i-1].value != "" && expensesItems[i].value != "") {
                 buttons[0].disabled = false;
                 buttons[0].style.background = "#ffbd75";  
@@ -70,16 +70,20 @@ expensesBtn.addEventListener("click", function() {
         let a  = expensesItems[i].value,
             b  = expensesItems[++i].value;
 
-        appData.expenses[a] = b;
-        sum += +b;            
-    } 
+        if((typeof (a)) != null && (typeof (b)) != null && a != "" && b != "" && a.length < 50) {
+            appData.expenses[a] = b;
+            sum += +b;             
+        } else {
+             i = i - 1;
+        }           
+    }  
     expensesValue.textContent = sum;   
 });
 
 // кнопка необязательных расходов активируется если хотя бы одно поле заполнено
 startBtn.addEventListener("click", function() {
     for(let i = 0; i < optionalExpensesItem.length; i++) {
-        optionalExpensesItem[i].addEventListener("change", function() {
+        optionalExpensesItem[i].addEventListener("input", function() {
             if(optionalExpensesItem[i].value != "") {
                 buttons[1].disabled = false;
                 buttons[1].style.background = "#ffbd75";  
@@ -88,7 +92,7 @@ startBtn.addEventListener("click", function() {
     } 
 });
 optionalExpensesBtn.addEventListener("click", function() {
-    expensesValue.textContent = "";
+    optionalExpensesValue.textContent = "";
 
     for(let i = 0; i < optionalExpensesItem.length; i++) {
             let optExpenses  = optionalExpensesItem[i].value;
