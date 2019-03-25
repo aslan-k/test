@@ -27,7 +27,7 @@ let startBtn = document.getElementById("start"),
     monthValue   = document.querySelector(".month-value"),
     dayValue     = document.querySelector(".day-value"); 
 
-let money, time, sum = 0;
+let money, time;
 
 startBtn.addEventListener("click", function() {
     time  = prompt("Введите дату в формате YYYY-MM-DD", "");
@@ -64,7 +64,8 @@ startBtn.addEventListener("click", function() {
 }
 });    
 expensesBtn.addEventListener("click", function() {
-    expensesValue.textContent = "";  
+    expensesValue.textContent = "";
+    let sum = 0;
 
     for(let i = 0; i < expensesItems.length; i++) {
         let a  = expensesItems[i].value,
@@ -73,10 +74,9 @@ expensesBtn.addEventListener("click", function() {
         if((typeof (a)) != null && (typeof (b)) != null && a != "" && b != "" && a.length < 50) {
             appData.expenses[a] = b;
             sum += +b;             
-        } else {
-             i = i - 1;
-        }           
-    }  
+        }          
+    }
+    appData.sumExpenses = sum;  
     expensesValue.textContent = sum;   
 });
 
@@ -108,7 +108,7 @@ startBtn.addEventListener("click", function() {
 countBtn.addEventListener("click", function(event) {
     if(appData.budget != undefined) {
         
-        appData.moneyPerDay = ((appData.budget-sum)/30).toFixed(); //Расчет дневного бюджета
+        appData.moneyPerDay = ((appData.budget-appData.sumExpenses)/30).toFixed(); //Расчет дневного бюджета
         daybudgetValue.textContent = appData.moneyPerDay;
 
         if(appData.moneyPerDay < 100) {
