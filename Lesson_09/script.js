@@ -101,21 +101,21 @@ let more    = document.querySelector(".more"),
 
 more.addEventListener("click", function() {
     overlay.style.display = "block";
-    this.classlist.add("more-splash");//выдает ошибку в консоли
-    document.body.style.overlay = "hidden";
+    this.classList.add("more-splash");
+    document.body.style.overflow = "hidden";
 });
 
 close.addEventListener("click", function() {
     overlay.style.display = "none";
     more.classList.remove("more-splash");
-    document.body.style.overlay= "";
+    document.body.style.overflow = "";
 });
 
 for(i = 0; i < btn.length; i++) {
     btn[i].addEventListener("click", function() {
         overlay.style.display = "block";
-        //this.classlist.add("more-splash");
-        //document.body.style.overlay = "hidden";
+        this.classList.add("more-splash");
+        document.body.style.overflow = "hidden";
     });
 }
 
