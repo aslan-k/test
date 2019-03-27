@@ -97,7 +97,8 @@ let more    = document.querySelector(".more"),
     overlay = document.querySelector(".overlay"),
     close   = document.querySelector(".popup-close"),
 
-    btn = document.getElementsByClassName("description-btn");
+    descrBtn = document.querySelectorAll(".description-btn"),
+    inform = document.querySelector(".info"); //перменная для родителя
 
 more.addEventListener("click", function() {
     overlay.style.display = "block";
@@ -111,13 +112,24 @@ close.addEventListener("click", function() {
     document.body.style.overflow = "";
 });
 
-for(i = 0; i < btn.length; i++) {
-    btn[i].addEventListener("click", function() {
-        overlay.style.display = "block";
-        this.classList.add("more-splash");
-        document.body.style.overflow = "hidden";
-    });
-}
+// Делегирование
+inform.addEventListener("click", function(event) {
+    let target = event.target;
+
+    if(target && target.classList.contains("description-btn")) {
+        for(let i = 0; i < descrBtn.length; i++) {
+            if(target == descrBtn[i]) {
+                descrBtn[i].addEventListener("click", function() {
+                    overlay.style.display = "block";
+                    this.classList.add("more-splash");
+                    document.body.style.overflow = "hidden";
+                });
+            }
+        }
+    }
+});
+
+
 
 
 
