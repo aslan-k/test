@@ -124,17 +124,23 @@ function sendForm(elem) {
         let request = new XMLHttpRequest(); 
         request.open("POST", "server.php");
     
-        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        request.setRequestHeader("Content-type", "application/json; charset=utf-8");
     
         let formData = new FormData(elem);
+
+        let obj = {};
+        formData.forEach(function(value, key) {
+            obj[key] = value;
+        });
+        let json = JSON.stringify(obj);
 
     //Валидация   
         for(let i = 0; i < input.length; i++) { 
             function valid(inp) {
-                if( !inp.match(/^\+\d+$/) ) {
-                    statusMessage.innerHTML = message.telNumber;
+                if( inp.match(/^[- +()]*[0-9][- +()0-9]*$/) || inp.match(/\+/) ) {
+                    request.send(json);                   
                 } else {
-                    request.send(formData);   
+                    statusMessage.innerHTML = message.telNumber;   
                 }
             }
             valid(input[i].value);  
