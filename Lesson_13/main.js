@@ -116,8 +116,12 @@ let form = document.querySelector(".main-form"),
     document.body.addEventListener('input', (e) => {
         let target = e.target;
         if(target.tagName == "INPUT"){
-            target.value = target.value.replace (/[^0-9+]/, '');
-        }
+            if(target == email) {   
+                target.value = target.value.replace (/[^a-z@]/, '')  
+            } else {
+                target.value = target.value.replace (/[^0-9+]/, '')
+            }    
+        } 
     });
      
 function sendForm(elem) {
@@ -218,7 +222,7 @@ persons.addEventListener("change", function() {
     personsSum = +this.value;
     total = (daysSum + personsSum)*4000;
 
-    if(restDays.value == "" || persons.value == "") {
+    if(restDays.value == "" || persons.value == "" || restDays.value == "0" || persons.value == "0") {
         totalValue.innerHTML = 0;
     } else {
         totalValue.innerHTML = total;
@@ -228,7 +232,7 @@ restDays.addEventListener("change", function() {
     daysSum = +this.value;
     total = (daysSum + personsSum)*4000;
 
-    if(restDays.value == "" || persons.value == "" ) {
+    if(restDays.value == "" || persons.value == "" || restDays.value == "0" || persons.value == "0") {
         totalValue.innerHTML = 0;
     } else {
         totalValue.innerHTML = total;
@@ -242,7 +246,14 @@ place.addEventListener("change", function() {
         totalValue.innerHTML = a*this.options[this.selectedIndex].value;
     }
 });
-
+/*
+document.body.addEventListener('input', (e) => {
+        let target = e.target;
+        if(target.tagName == "INPUT"){
+            target.value = target.value.replace (/[^0-9+]/, '');
+        }
+    });
+*/
 
 
 

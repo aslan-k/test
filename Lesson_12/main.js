@@ -117,8 +117,12 @@ let form = document.querySelector(".main-form"),
     document.body.addEventListener('input', (e) => {
         let target = e.target;
         if(target.tagName == "INPUT"){
-            target.value = target.value.replace (/[^0-9+]/, '')
-        }
+            if(target == email) {   
+                target.value = target.value.replace (/[^a-z@]/, '')  
+            } else {
+                target.value = target.value.replace (/[^0-9+]/, '')
+            }    
+        } 
     });
 
 function sendForm(elem) {
