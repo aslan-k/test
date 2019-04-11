@@ -1,8 +1,7 @@
- 
-window.addEventListener("DOMContentLoaded", () => {
+ window.addEventListener("DOMContentLoaded", () => {
 
     "use strict";
-
+//Tabs
     let tab = document.querySelectorAll(".info-header-tab"),
         info = document.querySelector(".info-header"),
         tabContent = document.querySelectorAll(".info-tabcontent");
@@ -36,7 +35,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });       
 }); 
 //   Timer                           
-let deadline = "2019-04-03";
+let deadline = "2019-04-13";
 
 let getTimeRemaining = endtime => {
     let tech = Date.parse(endtime) - Date.parse(new Date()),
@@ -106,28 +105,40 @@ let message = {
     loading: "Загрузка...",
     success: "Спасибо! Скоро мы с Вами свяжемся.",
     failure: "Что-то пошло не так...",
-    onlyNumber: "Некорректный ввод!"
+    telNumber: "Некорректный ввод!"
 };
 
 let form = document.querySelector(".main-form"),
-    input = document.getElementsByTagName("input"),
-    contactForm = document.querySelector("#form"),//для контактной формы
+    inputs = document.getElementsByTagName("input"),
+    contactForm = document.querySelector("#form"),
     statusMessage = document.createElement("div");
-
     statusMessage.classList.add("status");
-     
+
+    document.body.addEventListener('input', (e) => {
+        let target = e.target;
+        if(target.tagName == "INPUT"){
+            target.value = target.value.replace (/[^0-9+]/, '')
+        }
+    });
+
 function sendForm(elem) {
     elem.addEventListener("submit", function(e) { 
         e.preventDefault();
         elem.appendChild(statusMessage);
 
-        let formData = new FormData(elem);
+        let formData = new FormData(elem),
+            obj = {};
+        formData.forEach(function(value, key) {
+            obj[key] = value;
+        });
 
-        function postData(data) {
+        function postData() {
             return new Promise(function(resolve,reject) {
-                let request = new XMLHttpRequest(); 
+                let request = new XMLHttpRequest(),
+                    json = JSON.stringify(obj);
+
                 request.open("POST", "server.php");
-                request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                request.setRequestHeader("Content-type", "application/json; charset=utf-8");
                 
                 request.onreadystatechange = function() {
                     if(request.readyState < 4) {
@@ -137,39 +148,32 @@ function sendForm(elem) {
                     } else {
                         reject()
                     }        
-                };
-
-                //Валидация
-                for(let i = 0; i < input.length; i++) { 
-                    function valid(inp) {
-                        if( !inp.match(/^\+\d+$/) ) {
-                            statusMessage.innerHTML = message.onlyNumber;
-                        } else {
-                            request.send(data);   
-                        }
-                    }
-                    valid(input[i].value);  
-                }
-            })
-        } //end postData
-
-        function clearInput() {
-            for(let i = 0; i < input.length; i++) {
-                input[i].value = "";
-            }
+                };                             
+                request.send(json); 
+            });    
         }
 
-        //использование промисов
+        function clearInputs() {
+            for(let i = 0; i < inputs.length; i++) { inputs[i].value = ""; }    
+        }
+        
         postData(formData)
             .then( () => statusMessage.innerHTML = message.loading)
             .then( () => statusMessage.innerHTML = message.success)
             .catch( () => statusMessage.innerHTML = message.failure)
-            .then(clearInput)
-                
+            .then(clearInputs)    
     });
 }
+
 sendForm(form);
 sendForm(contactForm);
+
+
+
+
+
+
+
 
 
 

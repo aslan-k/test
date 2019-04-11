@@ -1,4 +1,3 @@
-
 window.addEventListener("DOMContentLoaded", () => {
 
     "use strict";
@@ -106,46 +105,38 @@ let message = {
     loading: "Загрузка...",
     success: "Спасибо! Скоро мы с Вами свяжемся.",
     failure: "Что-то пошло не так...",
-    telNumber: "Некорректный ввод!"
 };
 
 let form = document.querySelector(".main-form"),
-    input = document.getElementsByTagName("input"),
-    contactForm = document.querySelector("#form"),//для контактной формы
+    inputs = document.getElementsByTagName("input"),
+    contactForm = document.querySelector("#form"),
     statusMessage = document.createElement("div");
-
     statusMessage.classList.add("status");
+
+    document.body.addEventListener('input', (e) => {
+        let target = e.target;
+        if(target.tagName == "INPUT"){
+            target.value = target.value.replace (/[^0-9+]/, '');
+        }
+    });
      
 function sendForm(elem) {
     elem.addEventListener("submit", function(e) { 
         e.preventDefault();
         elem.appendChild(statusMessage);
-    
-        let request = new XMLHttpRequest(); 
-        request.open("POST", "server.php");
-    
-        request.setRequestHeader("Content-type", "application/json; charset=utf-8");
-    
-        let formData = new FormData(elem);
 
-        let obj = {};
+        let formData = new FormData(elem),
+            obj = {};
         formData.forEach(function(value, key) {
             obj[key] = value;
         });
-        let json = JSON.stringify(obj);
+    
+        let request = new XMLHttpRequest(),
+            json = JSON.stringify(obj);
 
-    //Валидация   
-        for(let i = 0; i < input.length; i++) { 
-            function valid(inp) {
-                if( !inp.match(/^\+\d+$/) ) {
-                    statusMessage.innerHTML = message.telNumber;
-                } else {
-                    request.send(json);   
-                }
-            }
-            valid(input[i].value);  
-        }
-        
+        request.open("POST", "server.php");
+        request.setRequestHeader("Content-type", "application/json; charset=utf-8");
+    
         request.onreadystatechange = function() {
             if(request.readyState < 4) {
                 statusMessage.innerHTML = message.loading;
@@ -154,11 +145,11 @@ function sendForm(elem) {
             } else {
                 statusMessage.innerHTML = message.failure;
             }        
-        }
-    
-        for(let i = 0; i < input.length; i++) {
-            input[i].value = "";
-        }
+        };
+        request.send(json);
+
+        for(let i = 0; i < inputs.length; i++) { inputs[i].value = ""; }    
+        
     });
 }
 sendForm(form);
@@ -177,33 +168,33 @@ showSlides(slideIndex);
 function showSlides(n) {
 
     if(n > slides.length) {
-        slideIndex = 1; //переключить направо с последней на первую
+        slideIndex = 1;
     }
     if(n < 1) {
-        slideIndex = slides.length; //переключить налево с 1 на последнюю
+        slideIndex = slides.length;
     }
 
-    slides.forEach(item => item.style.display = "none"); //скрыть слыйды
-    dots.forEach(item => item.classList.remove("dot-active")); //деактивировать точки
+    slides.forEach(item => item.style.display = "none");
+    dots.forEach(item => item.classList.remove("dot-active"));
 
-    slides[slideIndex - 1].style.display = "block"; //показать первый слайд
-    dots[slideIndex - 1].classList.add("dot-active"); //активировать первую точку
+    slides[slideIndex - 1].style.display = "block";
+    dots[slideIndex - 1].classList.add("dot-active");
 }
-function plusSlides(n) { //перелистывает слайды
+function plusSlides(n) {
     showSlides(slideIndex += n);
 }
-function currentSlide(n) { //определяет текущий слайд и устанавливает его
+function currentSlide(n) {
     showSlides(slideIndex = n);
 }
 
 prev.addEventListener("click", function() {
-    plusSlides(-1); //перелистывает слайды назад 
+    plusSlides(-1);
 });
 next.addEventListener("click", function() {
-    plusSlides(1); //перелистывает слайды вперед 
+    plusSlides(1);
 });
 
-dotsWrap.addEventListener("click", function(event) { //делегирование с точками
+dotsWrap.addEventListener("click", function(event) {
     for(let i = 0; i < dots.length + 1; i++){
         if(event.target.classList.contains("dot") && event.target == dots[i-1]) {
             currentSlide(i);
@@ -211,11 +202,12 @@ dotsWrap.addEventListener("click", function(event) { //делегировани�
     }
 });
 
-//   Calculate
+//   Calc
 let persons  = document.querySelectorAll(".counter-block-input")[0],
     restDays = document.querySelectorAll(".counter-block-input")[1],
+    
     place = document.getElementById("select"),
-    totalValue = document.getElementById("total"),
+    totalValue = document.getElementById("total"), 
     personsSum = 0,
     daysSum = 0,
     total = 0;
@@ -223,21 +215,21 @@ let persons  = document.querySelectorAll(".counter-block-input")[0],
 totalValue.innerHTML = 0;    
 
 persons.addEventListener("change", function() {
-    personsSum = +this.value;//this.value - значение интпута на котором просисходит событие
+    personsSum = +this.value;
     total = (daysSum + personsSum)*4000;
 
-    if(restDays.value == ""){ //если поле сколько дней пустое
-        totalValue.innerHTML = 0; 
+    if(restDays.value == "" || persons.value == "") {
+        totalValue.innerHTML = 0;
     } else {
         totalValue.innerHTML = total;
     }
 });
 restDays.addEventListener("change", function() {
-    daysSum = +this.value;//this.value - значение интпута на котором просисходит событие
+    daysSum = +this.value;
     total = (daysSum + personsSum)*4000;
 
-    if(persons.value == ""){ //если поле количество людей пустое
-        totalValue.innerHTML = 0; 
+    if(restDays.value == "" || persons.value == "" ) {
+        totalValue.innerHTML = 0;
     } else {
         totalValue.innerHTML = total;
     }
@@ -246,9 +238,7 @@ place.addEventListener("change", function() {
     if(restDays.value == "" || persons.value == ""){
         totalValue.innerHTML = 0;
     } else {
-        let a = total;//промежуточная перем. чтоб не вычислять значение тотал при каждом повторном переключении места
-        // дальше через this.options обращаемся к тому эл-ту options в верстке, на кот. в данный  
-        // момент воздействуем и через [this.selectedIndex].value получаем его value
+        let a = total;
         totalValue.innerHTML = a*this.options[this.selectedIndex].value;
     }
 });

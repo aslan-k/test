@@ -1,8 +1,7 @@
-
 window.addEventListener("DOMContentLoaded", () => {
 
     "use strict";
-
+//Tabs
     let tab = document.querySelectorAll(".info-header-tab"),
         info = document.querySelector(".info-header"),
         tabContent = document.querySelectorAll(".info-tabcontent");
@@ -34,9 +33,9 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         }
     });       
-}); 
+});
 //   Timer                           
-let deadline = "2019-04-03";
+let deadline = "2019-04-13";
 
 let getTimeRemaining = endtime => {
     let tech = Date.parse(endtime) - Date.parse(new Date()),
@@ -106,46 +105,38 @@ let message = {
     loading: "Загрузка...",
     success: "Спасибо! Скоро мы с Вами свяжемся.",
     failure: "Что-то пошло не так...",
-    telNumber: "Некорректный ввод!"
 };
 
 let form = document.querySelector(".main-form"),
-    input = document.getElementsByTagName("input"),
-    contactForm = document.querySelector("#form"),//для контактной формы
+    inputs = document.getElementsByTagName("input"),
+    contactForm = document.querySelector("#form"),
     statusMessage = document.createElement("div");
-
     statusMessage.classList.add("status");
+
+    document.body.addEventListener('input', (e) => {
+        let target = e.target;
+        if(target.tagName == "INPUT"){
+            target.value = target.value.replace (/[^0-9+]/, '');
+        }
+    });
      
 function sendForm(elem) {
     elem.addEventListener("submit", function(e) { 
         e.preventDefault();
         elem.appendChild(statusMessage);
-    
-        let request = new XMLHttpRequest(); 
-        request.open("POST", "server.php");
-    
-        request.setRequestHeader("Content-type", "application/json; charset=utf-8");
-    
-        let formData = new FormData(elem);
 
-        let obj = {};
+        let formData = new FormData(elem),
+            obj = {};
         formData.forEach(function(value, key) {
             obj[key] = value;
         });
-        let json = JSON.stringify(obj);
+    
+        let request = new XMLHttpRequest(),
+            json = JSON.stringify(obj);
 
-    //Валидация   
-        for(let i = 0; i < input.length; i++) { 
-            function valid(inp) {
-                if( inp.match(/^[- +()]*[0-9][- +()0-9]*$/) || inp.match(/\+/) ) {
-                    request.send(json);                   
-                } else {
-                    statusMessage.innerHTML = message.telNumber;   
-                }
-            }
-            valid(input[i].value);  
-        }
-        
+        request.open("POST", "server.php");
+        request.setRequestHeader("Content-type", "application/json; charset=utf-8");
+    
         request.onreadystatechange = function() {
             if(request.readyState < 4) {
                 statusMessage.innerHTML = message.loading;
@@ -154,15 +145,17 @@ function sendForm(elem) {
             } else {
                 statusMessage.innerHTML = message.failure;
             }        
-        }
-    
-        for(let i = 0; i < input.length; i++) {
-            input[i].value = "";
-        }
+        };
+        request.send(json);
+
+        for(let i = 0; i < inputs.length; i++) { inputs[i].value = ""; }    
+        
     });
 }
+
 sendForm(form);
 sendForm(contactForm);
+
 
 
 
