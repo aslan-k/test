@@ -118,7 +118,7 @@ let form = document.querySelector(".main-form"),
         let target = e.target;
         if(target.tagName == "INPUT"){
             if(target == email) {   
-                target.value = target.value.replace (/[^a-z@]/, '')  
+                target.value = target.value.replace (/[^a-z@._]/, '')  
             } else {
                 target.value = target.value.replace (/[^0-9+]/, '')
             }    

@@ -117,7 +117,7 @@ let form = document.querySelector(".main-form"),
         let target = e.target;
         if(target.tagName == "INPUT"){
             if(target == email) {   
-                target.value = target.value.replace (/[^a-z@]/, '')  
+                target.value = target.value.replace (/[^a-z@._]/, '')  
             } else {
                 target.value = target.value.replace (/[^0-9+]/, '')
             }    
@@ -246,14 +246,6 @@ place.addEventListener("change", function() {
         totalValue.innerHTML = a*this.options[this.selectedIndex].value;
     }
 });
-/*
-document.body.addEventListener('input', (e) => {
-        let target = e.target;
-        if(target.tagName == "INPUT"){
-            target.value = target.value.replace (/[^0-9+]/, '');
-        }
-    });
-*/
 
 
 
