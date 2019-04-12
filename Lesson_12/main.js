@@ -111,6 +111,7 @@ let message = {
 let form = document.querySelector(".main-form"),
     inputs = document.getElementsByTagName("input"),
     contactForm = document.querySelector("#form"),
+    email = document.getElementById("email"),
     statusMessage = document.createElement("div");
     statusMessage.classList.add("status");
 

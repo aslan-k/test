@@ -110,9 +110,10 @@ let message = {
 let form = document.querySelector(".main-form"),
     inputs = document.getElementsByTagName("input"),
     contactForm = document.querySelector("#form"),
+    email = document.getElementById("email"),
     statusMessage = document.createElement("div");
     statusMessage.classList.add("status");
-
+    
     document.body.addEventListener('input', (e) => {
         let target = e.target;
         if(target.tagName == "INPUT"){
@@ -209,12 +210,13 @@ dotsWrap.addEventListener("click", function(event) {
 //   Calc
 let persons  = document.querySelectorAll(".counter-block-input")[0],
     restDays = document.querySelectorAll(".counter-block-input")[1],
-    
+    placeOpt = document.getElementsByTagName("option"),
     place = document.getElementById("select"),
     totalValue = document.getElementById("total"), 
     personsSum = 0,
     daysSum = 0,
-    total = 0;
+    total = 0,
+    perem = 1;
 
 totalValue.innerHTML = 0;    
 
@@ -225,7 +227,7 @@ persons.addEventListener("change", function() {
     if(restDays.value == "" || persons.value == "" || restDays.value[0] == "0" || persons.value[0] == "0") {
         totalValue.innerHTML = 0;
     } else {
-        totalValue.innerHTML = total;
+        totalValue.innerHTML = total*perem;     
     }
 });
 restDays.addEventListener("change", function() {
@@ -235,11 +237,13 @@ restDays.addEventListener("change", function() {
     if(restDays.value == "" || persons.value == "" || restDays.value[0] == "0" || persons.value[0] == "0") {
         totalValue.innerHTML = 0;
     } else {
-        totalValue.innerHTML = total;
+        totalValue.innerHTML = total*perem;         
     }
 });
 place.addEventListener("change", function() {
-    if(restDays.value == "" || persons.value == ""){
+    perem = this.options[this.selectedIndex].value;
+
+    if(restDays.value == "" || persons.value == "" || restDays.value[0] == "0" || persons.value[0] == "0"){
         totalValue.innerHTML = 0;
     } else {
         let a = total;
