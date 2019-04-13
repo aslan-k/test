@@ -35,7 +35,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });       
 }); 
 //   Timer                           
-let deadline = "2019-04-03";
+let deadline = "2019-04-22";
 
 let getTimeRemaining = endtime => {
     let tech = Date.parse(endtime) - Date.parse(new Date()),
@@ -61,10 +61,10 @@ let getTimeRemaining = endtime => {
 }
 
 let setClock = (id, endtime) => {
-    let timer = document.getElementById(id);
+    let timer = document.getElementById(id),
         hours = timer.querySelector(".hours"),
         minutes = timer.querySelector(".minutes"),
-        seconds = timer.querySelector(".seconds");
+        seconds = timer.querySelector(".seconds"),
         timeInterval = setInterval(updateClock, 1000);
     
     function updateClock() {   
