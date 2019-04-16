@@ -55,83 +55,96 @@
         (target == closePopupGift) ? bindModalPopupGift("none") : "";
     });
 
-//4. Карточка - Нижний слайдер
+// 4. Карточка - Аккордеон
+    let accordions = document.querySelectorAll(".accordion-block"),
+        accordionHeading = document.querySelectorAll(".accordion-heading"); 
+
+    let hideContent = a => {
+        for(let i = a; i < accordions.length; i++) {
+            accordions[i].classList.remove("show");
+            accordions[i].classList.add("hide"); 
+        }
+    }
+    hideContent(0);
+
+    let showContent = b => {
+        if(accordions[b].classList.contains("hide")) {
+            accordions[b].classList.remove("hide");
+            accordions[b].classList.add("show");
+            accordions[b].style.transition = 3000;
+        }
+    }
+
+    for(let i = 0; i < accordionHeading.length; i++) {
+        accordionHeading[i].addEventListener("click", () => {
+            hideContent(0);
+            showContent(i);
+        });
+    }
+
+//5. Карточка - Нижний слайдер
     let slides = document.querySelectorAll(".feedback-slider-item"),
         prev = document.querySelector(".main-prev-btn"),
         next = document.querySelector(".main-next-btn"),
         slideIndex = 1;
-    
-    //console.log(slides.length);
-    //console.log(prev);
 
     showSlides(slideIndex);
     //let timeId = setInterval(showSlides(slideIndex), 3000);
 
     function showSlides(n) {
-        (n > slides.length) ? slideIndex = 1 : "" ; //переключить направо с последней на первую
-        (n < 1) ? slideIndex = slides.length : ""; //переключить налево с 1 на последнюю
+        (n > slides.length) ? slideIndex = 1 : "" ;
+        (n < 1) ? slideIndex = slides.length : "";
              
-        slides.forEach(item => item.style.display = "none"); //скрыть слыйды
-        slides[slideIndex - 1].style.display = "block"; //показать первый слайд
+        slides.forEach(item => item.style.display = "none");
+        slides[slideIndex - 1].style.display = "block";
     }
 
-    function plusSlides(n) { //перелистывает слайды
+    function plusSlides(n) {
         showSlides(slideIndex += n);
-        //setInterval(showSlides(slideIndex += n), 3000);
+        
     }
-    prev.addEventListener("click", () => { plusSlides(-1); });//перелистывает слайды назад
-    next.addEventListener("click", () => { plusSlides(1); }); //перелистывает слайды вперед
+   //setInterval(prev.addEventListener("click", () => { plusSlides(-1); }), 3000);
+    prev.addEventListener("click", () => { plusSlides(-1); });
+    //next.addEventListener("click", () => { plusSlides(1);  });
+    next.addEventListener("click", () => { setInterval(plusSlides(1), 1000);  });
 
-//5. Карточка - Формы в модальных окнах
+//6. Карточка - Формы в модальных окнах
     let message = {
         loading: "Идет отправка...",
         success: "Отправлено!",
-        failure: "Ошибка!"
+        failure: "Ошибка!",
+        onlyNumber: "Некорректный ввод!"
     };
 
     let formSendToDesigner = document.querySelector("#popup-design-form"),
         formGetConsultation = document.querySelector("#popup-consultation-form"),
 
+
         inputs = document.getElementsByTagName("input"),
-        //textarea = document.getElementsByTagName("textarea"), ОЧИСТИТЬ textarea !!!!
         inputPhone = document.getElementById("phone-num"),
+        //textarea = document.getElementsByTagName("textarea"), ОЧИСТИТЬ textarea !!!!
         
         statusMessage = document.createElement("div");
-//////ВАЛИДАЦИя
-    document.body.addEventListener('input', (e) => {
-        let target = e.target;
-        if(target == inputPhone) {
-            function valid(inp) {
-                if( !inp.match(/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/, '') ) {
-                    statusMessage.innerHTML = message.onlyNumber;
-                    console.log("OK");
-                }
-            }
-            valid(target.value);    
-        }         
-    });
-
+/*  */   //ВАЛИДАЦИя
+document.body.addEventListener('input', (e) => {
+    let target = e.target;
+    if(target == inputPhone) {
+        target.value = target.value.replace (/[^0-9+]/, '') //  (/[^0-9+]/, '') {12}
+        console.log("TRGET OK");      
+    }         
+});
 /*
-target.value = target.value.replace (/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/, '')
-            console.log("OK");
-
-
-    document.body.addEventListener('input', (e) => {
-        let target = e.target;
-        if(target.tagName == "INPUT"){
-            if(target == email) {   
-                target.value = target.value.replace (/[^a-z@._]/, '')  
-            } else {
-                target.value = target.value.replace (/[^0-9+]/, '')
-            }    
-        } 
-    });
-                                     ^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$
-    console.log(formSendToDesigner);
-    console.log(formGetConsultation);
-
-    console.log(inputs);
-    console.log(statusMessage);
+function ValidPhone() {
+    let re = /^\d[\d\(\)\ -]{4,11}\d$/,
+        myPhone = document.getElementById("phone-num").value,
+        valid = re.test(myPhone);
+    if (valid) output = console.log("OK");
+    else output = console.log(" ТУУУУ OK");
+    statusMessage.innerHTML = message.onlyNumber;
+    return valid;
+}
+ValidPhone();
+^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$
 */    
 
     function sendForm(elem) {
@@ -166,11 +179,10 @@ target.value = target.value.replace (/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\-
 
     //statusMessage.classList.add("status"); для стилизации
 
-//<form class=form action=mailer/smart.php method=POST id="popup-consultation-form"> - 635 форма Консультация
-//<form action= method=POST enctype=multipart/form-data  id="popup-design-form"> - 658 --> форма для Отправить Дизайнеру
+ //<form class=form action=mailer/smart.php method=POST id="popup-consultation-form"> - 635 форма Консультация
+ //<form action= method=POST enctype=multipart/form-data  id="popup-design-form"> - 658 --> форма для Отправить Дизайнеру
 
-//-----------------------------------------------------------------//
-
+ //-----------------------------------------------------------------//
 
 });
 

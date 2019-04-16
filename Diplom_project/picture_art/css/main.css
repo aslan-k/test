@@ -918,15 +918,19 @@ h4 {
   font-size: 2.2rem;
   cursor: pointer;
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 4rem; 
 }
 .often-questions .accordion-heading span {
   border-bottom: 2px dotted #333;
 }
 .often-questions .accordion-block {
   margin-top: 6rem;
-  background-color: #f7e7e6;
+  background-color: rgb(131, 247, 218);
   padding: 3rem 4rem;
+}
+.often-questions .accordion-block p {
+  color: rgb(34, 97, 126);
+  transition: 2s;
 }
 .often-questions .accordion-block:before {
   content: '';
@@ -935,7 +939,7 @@ h4 {
   transform: translateX(-50%);
   top: -6rem;
   border: 3rem solid transparent;
-  border-bottom: 3rem solid #f7e7e6;
+  border-bottom: 3rem solid #f7e7e6; 
 }
 .often-questions .ui-accordion-header-active {
   cursor: auto;
