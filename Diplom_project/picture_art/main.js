@@ -89,6 +89,7 @@
         slideIndex = 1;
 
     showSlides(slideIndex);
+    //setInterval(showSlides(slideIndex), 3000);
     //let timeId = setInterval(showSlides(slideIndex), 3000);
 
     function showSlides(n) {
@@ -98,22 +99,21 @@
         slides.forEach(item => item.style.display = "none");
         slides[slideIndex - 1].style.display = "block";
     }
-
     function plusSlides(n) {
         showSlides(slideIndex += n);
-        
+        //setInterval(showSlides(slideIndex += n), 3000);    
     }
-   //setInterval(prev.addEventListener("click", () => { plusSlides(-1); }), 3000);
     prev.addEventListener("click", () => { plusSlides(-1); });
-    //next.addEventListener("click", () => { plusSlides(1);  });
-    next.addEventListener("click", () => { setInterval(plusSlides(1), 1000);  });
+    next.addEventListener("click", () => { plusSlides(1);  });
+    //next.addEventListener("click", () => { setInterval(plusSlides(1), 1000);  });
+    //setInterval(prev.addEventListener("click", () => { plusSlides(-1); }), 3000);
 
 //6. Карточка - Формы в модальных окнах
     let message = {
         loading: "Идет отправка...",
         success: "Отправлено!",
         failure: "Ошибка!",
-        onlyNumber: "Некорректный ввод!"
+        onlyNumber: "Некорректный ввод телефона!"
     };
 
     let formSendToDesigner = document.querySelector("#popup-design-form"),
@@ -122,31 +122,33 @@
 
         inputs = document.getElementsByTagName("input"),
         inputPhone = document.getElementById("phone-num"),
-        //textarea = document.getElementsByTagName("textarea"), ОЧИСТИТЬ textarea !!!!
+        inputConsPhone = document.getElementById("cons-phone-num"),
+
+        textarea = document.getElementsByName("message");
         
         statusMessage = document.createElement("div");
+        //statusMessage.classList.add("status");
+
+    console.log(inputPhone.length);
+    console.log(textarea);
 /*  */   //ВАЛИДАЦИя
-document.body.addEventListener('input', (e) => {
+document.body.addEventListener('change', (e) => {
     let target = e.target;
-    if(target == inputPhone) {
-        target.value = target.value.replace (/[^0-9+]/, '') //  (/[^0-9+]/, '') {12}
-        console.log("TRGET OK");      
+    if(target == inputPhone || target == inputConsPhone) {
+        validPhone();
+        function validPhone() {
+            let re = /^\d[\d\(\)\ -]{4,15}\d$/,        
+                valid = re.test(target.value);
+            if (valid == false) {
+                statusMessage.innerHTML = message.onlyNumber;
+                target.value = "";
+                console.log("ОШИБКА");
+            }
+            return statusMessage;
+        }     
     }         
 });
-/*
-function ValidPhone() {
-    let re = /^\d[\d\(\)\ -]{4,11}\d$/,
-        myPhone = document.getElementById("phone-num").value,
-        valid = re.test(myPhone);
-    if (valid) output = console.log("OK");
-    else output = console.log(" ТУУУУ OK");
-    statusMessage.innerHTML = message.onlyNumber;
-    return valid;
-}
-ValidPhone();
-^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$
-*/    
-
+/**/
     function sendForm(elem) {
         elem.addEventListener("submit", function(e) { 
             e.preventDefault();
@@ -170,7 +172,11 @@ ValidPhone();
                 }        
             }; 
         
-            for(let i = 0; i < inputs.length; i++) { inputs[i].value = ""; }   
+            for(let i = 0; i < inputs.length; i++) { 
+                inputs[i].value = "";
+                textarea.placeholder = "Комментарий";
+            } 
+              
             
         });
     }

@@ -927,10 +927,24 @@ h4 {
   margin-top: 6rem;
   background-color: rgb(131, 247, 218);
   padding: 3rem 4rem;
+
+  opacity:0;
+	transition: .5s;
+	
+	animation: show 2s 1;
+  animation-fill-mode: forwards;
+  animation-delay: .3s;
+}
+@keyframes show{
+  0%{
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
 }
 .often-questions .accordion-block p {
   color: rgb(34, 97, 126);
-  transition: 2s;
 }
 .often-questions .accordion-block:before {
   content: '';
