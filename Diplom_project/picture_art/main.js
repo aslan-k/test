@@ -89,9 +89,7 @@
         slideIndex = 1;
 
     showSlides(slideIndex);
-    //setInterval(showSlides(slideIndex), 3000);
-    //let timeId = setInterval(showSlides(slideIndex), 3000);
-
+    
     function showSlides(n) {
         (n > slides.length) ? slideIndex = 1 : "" ;
         (n < 1) ? slideIndex = slides.length : "";
@@ -99,15 +97,16 @@
         slides.forEach(item => item.style.display = "none");
         slides[slideIndex - 1].style.display = "block";
     }
-    function plusSlides(n) {
-        showSlides(slideIndex += n);
-        //setInterval(showSlides(slideIndex += n), 3000);    
-    }
-    prev.addEventListener("click", () => { plusSlides(-1); });
-    next.addEventListener("click", () => { plusSlides(1);  });
-    //next.addEventListener("click", () => { setInterval(plusSlides(1), 1000);  });
-    //setInterval(prev.addEventListener("click", () => { plusSlides(-1); }), 3000);
 
+    //let timerId = setInterval(() => showSlides(slideIndex), 2000);
+
+    function plusSlides(n) {    
+        //clearTimeout(timerId);
+        setInterval(() => showSlides(slideIndex += n), 2000);        
+    }
+    next.addEventListener("click", () => { plusSlides(1); });   
+    prev.addEventListener("click", () => { plusSlides(-1); });
+    
 //6. Карточка - Формы в модальных окнах
     let message = {
         loading: "Идет отправка...",
@@ -118,37 +117,30 @@
 
     let formSendToDesigner = document.querySelector("#popup-design-form"),
         formGetConsultation = document.querySelector("#popup-consultation-form"),
-
-
+        formMainConsultation = document.querySelector("#main-consultation-form"),
         inputs = document.getElementsByTagName("input"),
         inputPhone = document.getElementById("phone-num"),
         inputConsPhone = document.getElementById("cons-phone-num"),
-
-        textarea = document.getElementsByName("message");
-        
+        inputMainPhone = document.getElementById("main-phone-num"), 
+        //textarea = document.getElementsByName("message"), // ОЧИСТИТЬ 
         statusMessage = document.createElement("div");
-        //statusMessage.classList.add("status");
 
-    console.log(inputPhone.length);
-    console.log(textarea);
-/*  */   //ВАЛИДАЦИя
-document.body.addEventListener('change', (e) => {
-    let target = e.target;
-    if(target == inputPhone || target == inputConsPhone) {
-        validPhone();
-        function validPhone() {
-            let re = /^\d[\d\(\)\ -]{4,15}\d$/,        
-                valid = re.test(target.value);
-            if (valid == false) {
-                statusMessage.innerHTML = message.onlyNumber;
-                target.value = "";
-                console.log("ОШИБКА");
-            }
-            return statusMessage;
-        }     
-    }         
-});
-/**/
+//Валидация
+    document.body.addEventListener('change', (e) => {
+        let target = e.target;
+        if(target == inputPhone || target == inputConsPhone || target == inputMainPhone) {
+            validPhone();
+            function validPhone() {
+                let re = /^\d[\d\(\)\ -]{4,15}\d$/,        
+                    valid = re.test(target.value);
+                if (valid == false) {
+                    statusMessage.innerHTML = message.onlyNumber;
+                    target.value = "";
+                }
+                return message.onlyNumber;
+            }     
+        }         
+    });
     function sendForm(elem) {
         elem.addEventListener("submit", function(e) { 
             e.preventDefault();
@@ -166,29 +158,87 @@ document.body.addEventListener('change', (e) => {
                 if(request.readyState < 4) {
                     statusMessage.innerHTML = message.loading;
                 } else if(request.readyState === 4 && request.status == 200) {
-                    statusMessage.innerHTML = message.success; 
+                    statusMessage.innerHTML = message.success;
                 } else {
                     statusMessage.innerHTML = message.failure;
                 }        
             }; 
-        
-            for(let i = 0; i < inputs.length; i++) { 
-                inputs[i].value = "";
-                textarea.placeholder = "Комментарий";
-            } 
-              
-            
+            for(let i = 0; i < inputs.length; i++) { inputs[i].value = ""; }     
         });
     }
     sendForm(formSendToDesigner);
     sendForm(formGetConsultation);
+    sendForm(formMainConsultation);
 
-    //statusMessage.classList.add("status"); для стилизации
+    /////////////// Калькулятор //////////////////   value="" 
+    let sizeWrap  = document.querySelector("#size"), //wrap
+        materialWrap = document.querySelector("#material"), //wrap
+        optionsWrap = document.getElementById("#options"), //wrap
+        size = document.querySelectorAll(".pict-size"),
+        material = document.querySelectorAll(".pict-material"),
+        option = document.querySelectorAll(".pict-option"),
 
- //<form class=form action=mailer/smart.php method=POST id="popup-consultation-form"> - 635 форма Консультация
- //<form action= method=POST enctype=multipart/form-data  id="popup-design-form"> - 658 --> форма для Отправить Дизайнеру
+        calcPrice = document.getElementsByClassName(".calc-price"),
+        sizeSum = 15,
+        materialSum = 0,
+        optionSum = 0,
+        total = 0,
 
- //-----------------------------------------------------------------//
+        totalPrice = 0;
+/*
+        totalPrice = document.createElement("div");
+        function func(){ calcPrice.appendChild(totalPrice); }
+        func(); 
+ 
+    totalPrice.innerHTML = 0;
+
+    console.log(calcPrice);
+    console.log(size.length);
+    console.log(material.length);
+    console.log(option.length);
+*/     
+/*
+    sizeWrap.addEventListener("click", function(e) {
+        let target = e.target;
+        console.log("sizeWrap");
+        //for(let i = 0; i < size.length; i++) {}
+            (target == size[0]) ? sizeSum = 100:""; //;
+            (target == size[1]) ? sizeSum = 200:"";
+            (target == size[2]) ? sizeSum = 300:"";
+            (target == size[3]) ? sizeSum = 400:"";
+            
+        
+        console.log(sizeSum);
+        total = (sizeSum + materialSum + optionSum)*100;
+        console.log(total);
+        if(sizeSum == 0 || materialSum == 0 ){ 
+            totalPrice.innerHTML = 0;
+        } else {
+            totalPrice.innerHTML = total;
+            console.log(total);
+            console.log(totalPrice);     
+        }    
+    });
+    materialWrap.addEventListener("click", function(e) {
+        let target = e.target;
+        console.log("materialWrap");
+        
+        for(let i = 0; i < material.length; i++) {
+            (target == material[0]) ? materialSum = 100:"";
+            (target == material[1]) ? materialSum = 200:"";
+            (target == material[2]) ? materialSum = 300:"";
+        }
+        total = (sizeSum + materialSum + optionSum)*100;
+        console.log(total);
+        if(sizeSum == 0 || materialSum == 0 ){ 
+            totalPrice.innerHTML = 0;
+        } else {
+            totalPrice.innerHTML = total;
+            console.log(total);
+            console.log(totalPrice);     
+        }    
+    });
+*/
 
 });
 

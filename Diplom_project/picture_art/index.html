@@ -207,22 +207,23 @@
 						</div>
 						<select id=size>
 							<option >Выберите размер картины</option>
-							<option >40x50</option>
-							<option >50x70</option>
-							<option >70x70</option>
-							<option >70x100</option>
+							<option class="pict-size">40x50</option>
+							<option class="pict-size">50x70</option>
+							<option class="pict-size">70x70</option>
+							<option class="pict-size">70x100</option>
 						</select>
 						<select id=material>
 							<option >Выберите материал картины</option>
-							<option   title="Изящный, позволяет легко создавать текстуру, подходит для декоративных картин маслом.">Холст из волокна</option>
-							<option   title="Достаточно грубый и создает ощущение реальности, подходит для классических пейзажей, натюрмортов и портретов.">Льняной холст</option>
-							<option  title="Изящный, подходит для всех типов реалистичных портретов.">Холст из натурального хлопка</option>
+							<option class="pict-material" title="Изящный, позволяет легко создавать текстуру, подходит для декоративных картин маслом.">Холст из волокна</option>
+							<option class="pict-material"  title="Достаточно грубый и создает ощущение реальности, подходит для классических пейзажей, натюрмортов и портретов.">Льняной холст</option>
+							<option class="pict-material"  title="Изящный, подходит для всех типов реалистичных портретов.">Холст из натурального хлопка</option>
 						</select>
 						<select id=options>
 							<option >Дополнительные услуги</option>
-							<option >Покрытие арт-гелем</option>
-							<option >Экспресс-изготовление</option>
-							<option >Доставка готовых работ </option>
+							<option class="pict-option">Покрытие арт-гелем</option>
+							<option class="pict-option">Покрытие арт-гелем</option>
+							<option class="pict-option">Экспресс-изготовление</option>
+							<option class="pict-option">Доставка готовых работ </option>
 						</select>
 						<input type="text" class="promocode" placeholder="Введите ваш промокод">
 						<div class=calc-price>Для расчета нужно выбрать размер картины и материал картины</div>
@@ -572,10 +573,10 @@
 			<p class=p-heading>Остались вопросы?</p>
 			<h2>Получите консультацию художника!</h2>
 			<div class="col-md-10 col-md-offset-1">
-				<form class="consultation-form" action=mailer/smart.php method=POST>
+				<form class="consultation-form" action=mailer/smart.php method=POST id="main-consultation-form">
 					<div class=input-wrapper>
 						<input type=text name=name placeholder="Ваше имя" required>
-						<input type=text name=phone placeholder="Ваш телефон" required>
+						<input type=text name=phone-number placeholder="Ваш телефон" id="main-phone-num" required>
 						<input type=text name=email placeholder="Ваш E-mail">
 						<input class=input-text name=message type=text placeholder="Задайте ваш вопрос здесь" required>
 					</div>
@@ -664,7 +665,7 @@
 		<div class=popup-dialog>
 			<div class=popup-content>
 				<button class=popup-close id="close-popup-design">&times;</button>
-				<form action= method=POST enctype=multipart/form-data  id="popup-design-form">
+				<form action= method=POST enctype=multipart/form-data id="popup-design-form">
 					<h4>Заказать дизайн портрета</h4>
 					<div class=file_uploa>
 						<button type=button>Загрузить фотографию</button>
