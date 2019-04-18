@@ -71,7 +71,6 @@
         if(accordions[b].classList.contains("hide")) {
             accordions[b].classList.remove("hide");
             accordions[b].classList.add("show");
-            accordions[b].style.transition = 3000;
         }
     }
 
@@ -97,17 +96,15 @@
         slides.forEach(item => item.style.display = "none");
         slides[slideIndex - 1].style.display = "block";
     }
-
     //let timerId = setInterval(() => showSlides(slideIndex), 2000);
-
-    function plusSlides(n) {    
-        //clearTimeout(timerId);
+    function plusSlides(n) { 
+        //clearInterval(timerId);
         setInterval(() => showSlides(slideIndex += n), 2000);        
     }
-    next.addEventListener("click", () => { plusSlides(1); });   
-    prev.addEventListener("click", () => { plusSlides(-1); });
-    
-//6. Карточка - Формы в модальных окнах
+    next.addEventListener("click", () => { plusSlides(1); });
+    prev.addEventListener("click", () => { plusSlides(-1);  });
+         
+//6. Карточка - Формы в модальных окнах 
     let message = {
         loading: "Идет отправка...",
         success: "Отправлено!",
@@ -170,75 +167,158 @@
     sendForm(formGetConsultation);
     sendForm(formMainConsultation);
 
-    /////////////// Калькулятор //////////////////   value="" 
-    let sizeWrap  = document.querySelector("#size"), //wrap
-        materialWrap = document.querySelector("#material"), //wrap
-        optionsWrap = document.getElementById("#options"), //wrap
-        size = document.querySelectorAll(".pict-size"),
-        material = document.querySelectorAll(".pict-material"),
-        option = document.querySelectorAll(".pict-option"),
+    /////////////// Калькулятор //////////////////
 
-        calcPrice = document.getElementsByClassName(".calc-price"),
-        sizeSum = 15,
-        materialSum = 0,
-        optionSum = 0,
-        total = 0,
+    let size = document.getElementById("size"),
+        material = document.getElementById("material"),
+        options = document.getElementById("options"),
+        promocode = document.querySelector("#promo"),
+        totalPrice = document.getElementById("total-price"),
 
-        totalPrice = 0;
-/*
-        totalPrice = document.createElement("div");
-        function func(){ calcPrice.appendChild(totalPrice); }
-        func(); 
- 
+        sizeSum = 0, materialSum = 0, promo = "", optionSum= 0, total = 0;
+        
     totalPrice.innerHTML = 0;
+    
+    size.addEventListener("change", function() {
+        sizeSum = +this.options[this.selectedIndex].value;
+        total = (sizeSum + materialSum + optionSum)*10;
 
-    console.log(calcPrice);
-    console.log(size.length);
-    console.log(material.length);
-    console.log(option.length);
-*/     
-/*
-    sizeWrap.addEventListener("click", function(e) {
-        let target = e.target;
-        console.log("sizeWrap");
-        //for(let i = 0; i < size.length; i++) {}
-            (target == size[0]) ? sizeSum = 100:""; //;
-            (target == size[1]) ? sizeSum = 200:"";
-            (target == size[2]) ? sizeSum = 300:"";
-            (target == size[3]) ? sizeSum = 400:"";
-            
-        
-        console.log(sizeSum);
-        total = (sizeSum + materialSum + optionSum)*100;
-        console.log(total);
-        if(sizeSum == 0 || materialSum == 0 ){ 
-            totalPrice.innerHTML = 0;
+        if(sizeSum > 0 && materialSum > 0){
+            if(promo == "IWANTPOPART"){
+                totalPrice.innerHTML = total-total*0.3;
+            } else { 
+                totalPrice.innerHTML = total;
+            }   
         } else {
-            totalPrice.innerHTML = total;
-            console.log(total);
-            console.log(totalPrice);     
-        }    
-    });
-    materialWrap.addEventListener("click", function(e) {
-        let target = e.target;
-        console.log("materialWrap");
-        
-        for(let i = 0; i < material.length; i++) {
-            (target == material[0]) ? materialSum = 100:"";
-            (target == material[1]) ? materialSum = 200:"";
-            (target == material[2]) ? materialSum = 300:"";
+            totalPrice.innerHTML = 0;
         }
-        total = (sizeSum + materialSum + optionSum)*100;
-        console.log(total);
-        if(sizeSum == 0 || materialSum == 0 ){ 
-            totalPrice.innerHTML = 0;
-        } else {
-            totalPrice.innerHTML = total;
-            console.log(total);
-            console.log(totalPrice);     
-        }    
     });
-*/
+    material.addEventListener("change", function() {
+        materialSum = +this.options[this.selectedIndex].value;
+        total = (sizeSum + materialSum + optionSum)*10;
+        
+        if(sizeSum > 0 && materialSum > 0){
+            if(promo == "IWANTPOPART"){
+                totalPrice.innerHTML = total-total*0.3;
+            } else {
+                totalPrice.innerHTML = total;
+            }
+        } else {
+            totalPrice.innerHTML = 0;
+        }
+    });
+    options.addEventListener("change", function() {
+        optionSum = +this.options[this.selectedIndex].value;
+        total = (sizeSum + materialSum + optionSum)*10;
+        
+        if(sizeSum > 0 && materialSum > 0){
+            if(promo == "IWANTPOPART"){
+                totalPrice.innerHTML = total-total*0.3;
+            } else {
+                totalPrice.innerHTML = total;
+            }              
+        } else {
+            totalPrice.innerHTML = 0;
+        }
+    });
+    
+    document.body.addEventListener("change", e => {
+        let target = e.target;
+        if(target == promocode) {
+            if(promocode.value == "IWANTPOPART"){
+                promo = promocode.value; 
+            }
+            if(sizeSum > 0 && materialSum > 0){
+                if(promo == "IWANTPOPART"){
+                    totalPrice.innerHTML = total-total*0.3;
+                } else {
+                    totalPrice.innerHTML = total;
+                }
+            } else {
+                totalPrice.innerHTML = 0;
+            }
+        }
+    });
+    
+
+//ФИЛЬТРАЦИя БЛОКОВ
+    let portfolioMenu = document.querySelector(".portfolio-menu"),
+        allActive = document.querySelector("#all"),
+        lovers = document.querySelector("#lovers"),
+        chef = document.querySelector("#chef"),
+        girl = document.querySelector("#girl"),
+        guy = document.querySelector("#guy"),
+        grandmother = document.querySelector("#grandmother"),
+        granddad = document.querySelector("#granddad"),
+        portfolioNo = document.getElementsByClassName("portfolio-no"),
+        allPicture = document.getElementsByClassName("all");
+        
+    let hidePicture = () => {
+        for(let i = 0; i < allPicture.length; i++) {
+            allPicture[i].classList.remove("show");
+            allPicture[i].classList.add("hide"); 
+        }
+    } 
+    portfolioMenu.addEventListener("click", e => {
+        target = e.target;
+        if(target == lovers){
+            hidePicture(0);
+            for(let i = 0; i < allPicture.length; i++) {
+                if(allPicture[i].classList.contains("lovers")) {
+                    allPicture[i].classList.remove("hide");
+                    allPicture[i].classList.add("show");
+                }
+            }
+        }
+        if(target == chef){
+            hidePicture(0); 
+            for(let i = 0; i < allPicture.length; i++) {
+                if(allPicture[i].classList.contains("chef")) {
+                    allPicture[i].classList.remove("hide");
+                    allPicture[i].classList.add("show");
+                }
+            }
+        }
+        if(target == girl){
+            hidePicture(0); 
+            for(let i = 0; i < allPicture.length; i++) {
+                if(allPicture[i].classList.contains("girl")) {
+                    allPicture[i].classList.remove("hide");
+                    allPicture[i].classList.add("show");
+                }
+            }
+        }
+        if(target == guy){
+            hidePicture(0); 
+            for(let i = 0; i < allPicture.length; i++) {
+                if(allPicture[i].classList.contains("guy")) {
+                    allPicture[i].classList.remove("hide");
+                    allPicture[i].classList.add("show");
+                }
+            }
+        }
+        if(target == grandmother){
+            hidePicture(0); 
+            
+        }
+        if(target == granddad){
+            hidePicture(0); 
+            
+        }
+        if(target == allActive){
+            for(let i = 0; i < allPicture.length; i++) {
+                if(allPicture[i].classList.contains("hide")) {
+                    allPicture[i].classList.remove("hide");
+                    allPicture[i].classList.add("show");
+                }
+            }
+        }
+
+    });
+
+
+
+
 
 });
 
