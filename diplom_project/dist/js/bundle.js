@@ -152,8 +152,6 @@ function calc() {
       promo,
       total = 0;
   totalPrice.innerHTML = 0;
-  console.log(promo);
-  console.log("prOUT");
   size.addEventListener("change", function () {
     sizeSum = +this.options[this.selectedIndex].value;
     total = (sizeSum + materialSum + optionSum) * 10;
@@ -257,7 +255,8 @@ function filter() {
       guy = document.querySelector("#guy"),
       grandmother = document.querySelector("#grandmother"),
       granddad = document.querySelector("#granddad"),
-      portfolioNo = document.getElementsByClassName("portfolio-no"),
+      portfoliono = document.querySelector(".portfolio-no"),
+      tabs = document.getElementsByClassName("tabs"),
       allPicture = document.getElementsByClassName("all");
 
   var hidePicture = function hidePicture() {
@@ -267,11 +266,21 @@ function filter() {
     }
   };
 
+  var hideTabs = function hideTabs() {
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i].classList.remove("active")) {
+        tabs[i].classList.add("active");
+      }
+    }
+  };
+
   portfolioMenu.addEventListener("click", function (e) {
     var target = e.target;
 
     if (target == lovers) {
-      hidePicture(0);
+      hidePicture();
+      hideTabs();
+      lovers.classList.toggle("active");
 
       for (var i = 0; i < allPicture.length; i++) {
         if (allPicture[i].classList.contains("lovers")) {
@@ -282,7 +291,9 @@ function filter() {
     }
 
     if (target == chef) {
-      hidePicture(0);
+      hidePicture();
+      hideTabs();
+      chef.classList.toggle("active");
 
       for (var _i = 0; _i < allPicture.length; _i++) {
         if (allPicture[_i].classList.contains("chef")) {
@@ -294,7 +305,9 @@ function filter() {
     }
 
     if (target == girl) {
-      hidePicture(0);
+      hidePicture();
+      hideTabs();
+      girl.classList.toggle("active");
 
       for (var _i2 = 0; _i2 < allPicture.length; _i2++) {
         if (allPicture[_i2].classList.contains("girl")) {
@@ -306,7 +319,9 @@ function filter() {
     }
 
     if (target == guy) {
-      hidePicture(0);
+      hidePicture();
+      hideTabs();
+      guy.classList.toggle("active");
 
       for (var _i3 = 0; _i3 < allPicture.length; _i3++) {
         if (allPicture[_i3].classList.contains("guy")) {
@@ -318,14 +333,23 @@ function filter() {
     }
 
     if (target == grandmother) {
-      hidePicture(0);
+      hideTabs();
+      hidePicture();
+      grandmother.classList.toggle("active");
+      portfoliono.style.display = "block";
     }
 
     if (target == granddad) {
-      hidePicture(0);
+      hideTabs();
+      hidePicture();
+      granddad.classList.toggle("active");
+      portfoliono.style.display = "block";
     }
 
     if (target == allActive) {
+      hideTabs();
+      allActive.classList.toggle("active");
+
       for (var _i4 = 0; _i4 < allPicture.length; _i4++) {
         if (allPicture[_i4].classList.contains("hide")) {
           allPicture[_i4].classList.remove("hide");

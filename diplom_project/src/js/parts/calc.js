@@ -8,8 +8,7 @@ function calc() {
         sizeSum = 0, materialSum = 0, optionSum= 0, promo, total = 0;
         
     totalPrice.innerHTML = 0;
-    console.log(promo);
-    console.log("prOUT");
+ 
     size.addEventListener("change", function() {
         sizeSum = +this.options[this.selectedIndex].value;
         total = (sizeSum + materialSum + optionSum)*10;
