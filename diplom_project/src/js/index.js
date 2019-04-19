@@ -83,26 +83,21 @@
 
 //5. Карточка - Нижний слайдер
     let slides = document.querySelectorAll(".feedback-slider-item"),
-        prev = document.querySelector(".main-prev-btn"),
-        next = document.querySelector(".main-next-btn"),
-        slideIndex = 1;
+	    prev = document.querySelector(".main-prev-btn"),
+	    next = document.querySelector(".main-next-btn"),
+	    slideIndex = -1,
+	    timerId;
 
-    showSlides(slideIndex);
-    
-    function showSlides(n) {
-        (n > slides.length) ? slideIndex = 1 : "" ;
-        (n < 1) ? slideIndex = slides.length : "";
-             
-        slides.forEach(item => item.style.display = "none");
-        slides[slideIndex - 1].style.display = "block";
-    }
-    //let timerId = setInterval(() => showSlides(slideIndex), 2000);
-    function plusSlides(n) { 
-        //clearInterval(timerId);
-        setInterval(() => showSlides(slideIndex += n), 2000);        
-    }
-    next.addEventListener("click", () => { plusSlides(1); });
-    prev.addEventListener("click", () => { plusSlides(-1);  });
+	function showSlides(n) {
+	    clearTimeout(timerId);
+	    slideIndex += (n + slides.length);
+	    slideIndex %= slides.length;
+	    slides.forEach((item, i)  => item.style.display = slideIndex == i ? "block" : "none");
+	    timerId = window.setTimeout(showSlides, 2000, n)
+	}
+	showSlides(1);
+	next.addEventListener("click", () => { showSlides(1); });
+	prev.addEventListener("click", () => { showSlides(-1); });
          
 //6. Карточка - Формы в модальных окнах 
     let message = {
@@ -119,7 +114,6 @@
         inputPhone = document.getElementById("phone-num"),
         inputConsPhone = document.getElementById("cons-phone-num"),
         inputMainPhone = document.getElementById("main-phone-num"), 
-        //textarea = document.getElementsByName("message"), // ОЧИСТИТЬ 
         statusMessage = document.createElement("div");
 
 //Валидация
@@ -175,7 +169,7 @@
         promocode = document.querySelector("#promo"),
         totalPrice = document.getElementById("total-price"),
 
-        sizeSum = 0, materialSum = 0, promo = "", optionSum= 0, total = 0;
+        sizeSum = 0, materialSum = 0, optionSum= 0, total = 0;
         
     totalPrice.innerHTML = 0;
     
@@ -183,6 +177,7 @@
         sizeSum = +this.options[this.selectedIndex].value;
         total = (sizeSum + materialSum + optionSum)*10;
 
+        if(promocode.value == "IWANTPOPART"){promo = promocode.value;}
         if(sizeSum > 0 && materialSum > 0){
             if(promo == "IWANTPOPART"){
                 totalPrice.innerHTML = total-total*0.3;
@@ -197,6 +192,7 @@
         materialSum = +this.options[this.selectedIndex].value;
         total = (sizeSum + materialSum + optionSum)*10;
         
+        if(promocode.value == "IWANTPOPART"){promo = promocode.value;} 
         if(sizeSum > 0 && materialSum > 0){
             if(promo == "IWANTPOPART"){
                 totalPrice.innerHTML = total-total*0.3;
@@ -210,7 +206,8 @@
     options.addEventListener("change", function() {
         optionSum = +this.options[this.selectedIndex].value;
         total = (sizeSum + materialSum + optionSum)*10;
-        
+
+        if(promocode.value == "IWANTPOPART"){promo = promocode.value;}
         if(sizeSum > 0 && materialSum > 0){
             if(promo == "IWANTPOPART"){
                 totalPrice.innerHTML = total-total*0.3;
@@ -224,10 +221,9 @@
     
     document.body.addEventListener("change", e => {
         let target = e.target;
+        let promo = "";
         if(target == promocode) {
-            if(promocode.value == "IWANTPOPART"){
-                promo = promocode.value; 
-            }
+            if(promocode.value == "IWANTPOPART"){promo = promocode.value;}
             if(sizeSum > 0 && materialSum > 0){
                 if(promo == "IWANTPOPART"){
                     totalPrice.innerHTML = total-total*0.3;
@@ -238,8 +234,7 @@
                 totalPrice.innerHTML = 0;
             }
         }
-    });
-    
+    });  
 
 //ФИЛЬТРАЦИя БЛОКОВ
     let portfolioMenu = document.querySelector(".portfolio-menu"),
@@ -250,7 +245,7 @@
         guy = document.querySelector("#guy"),
         grandmother = document.querySelector("#grandmother"),
         granddad = document.querySelector("#granddad"),
-        portfolioNo = document.getElementsByClassName("portfolio-no"),
+        //portfolioNo = document.getElementsByClassName("portfolio-no"),
         allPicture = document.getElementsByClassName("all");
         
     let hidePicture = () => {
@@ -260,7 +255,7 @@
         }
     } 
     portfolioMenu.addEventListener("click", e => {
-        target = e.target;
+        let target = e.target;
         if(target == lovers){
             hidePicture(0);
             for(let i = 0; i < allPicture.length; i++) {
@@ -299,11 +294,9 @@
         }
         if(target == grandmother){
             hidePicture(0); 
-            
         }
         if(target == granddad){
-            hidePicture(0); 
-            
+            hidePicture(0);       
         }
         if(target == allActive){
             for(let i = 0; i < allPicture.length; i++) {
@@ -315,10 +308,6 @@
         }
 
     });
-
-
-
-
 
 });
 
